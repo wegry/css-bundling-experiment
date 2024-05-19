@@ -1,12 +1,12 @@
-import { buildColumns } from './build-columns.mjs'
-import './index.css'
-import * as s from './index.module.css'
+import { buildColumns } from '../build-columns.mjs'
+import './sync.css'
+import * as s from './sync.module.css'
 
 const grid = [
   {
     sync: true,
     css: 'global',
-    use: () => 'main',
+    use: () => 'chunkGlobal',
   },
   {
     sync: true,
@@ -18,7 +18,7 @@ const grid = [
     css: 'global',
     use: async () => {
       await import('./lazy.css', { with: { type: 'css' } })
-      return 'lazy'
+      return 'chunkLazyGlobal'
     },
   },
   {
@@ -33,10 +33,6 @@ const grid = [
   },
 ]
 
-document.addEventListener('DOMContentLoaded', () => {
-  for (const row of grid) {
-    buildColumns({ jsLoadedSync: true, ...row })
-  }
-
-  import('./chunks/lazy.mjs')
-})
+for (const row of grid) {
+  buildColumns({ jsLoadedSync: false, ...row })
+}
